@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BaixarYou - Downloader Universal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">
+            <i class="fas fa-download"></i>
+            <span>BaixarYou</span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="#home" class="active">Início</a></li>
+            <li><a href="#features">Recursos</a></li>
+            <li><a href="#how-it-works">Como Usar</a></li>
+            <li><a href="#supported-sites">Sites</a></li>
+            <li><a href="https://github.com/MisaAndrejezieski/Site-BaixarYou" target="_blank">GitHub</a></li>
+        </ul>
+        <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+</nav>
+
+<section id="home" class="hero">
+    <div class="hero-container">
+        <h1 class="hero-title">Baixe Vídeos de <span class="gradient-text">Qualquer Plataforma</span></h1>
+        <p class="hero-subtitle">YouTube, Instagram, TikTok, Twitter, Facebook, Vimeo e mais de 1800 sites</p>
+        
+        <div class="url-input-container">
+            <div class="input-group">
+                <i class="fas fa-link"></i>
+                <input type="text" id="urlInput" placeholder="Cole a URL do vídeo aqui...">
+                <button id="downloadBtn" class="btn-download">
+                    <i class="fas fa-download"></i> Baixar Agora
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="settings-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Configurações de <span class="gradient-text">Download</span></h2>
+        </div>
+        <div class="settings-wrapper">
+            <div class="settings-row">
+                <div class="setting-card">
+                    <div class="card-icon"><i class="fas fa-folder-open"></i></div>
+                    <h3>Onde salvar?</h3>
+                    <p class="setting-hint">📁 Pasta: backend/downloads</p>
+                </div>
+                <div class="setting-card">
+                    <div class="card-icon"><i class="fas fa-video"></i></div>
+                    <h3>Formato</h3>
+                    <select id="formatSelect" class="modern-select">
+                        <option value="mp4">MP4 (Universal)</option>
+                        <option value="webm">WEBM</option>
+                        <option value="mkv">MKV</option>
+                    </select>
+                </div>
+            </div>
+            <div class="settings-row">
+                <div class="setting-card">
+                    <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Qualidade</h3>
+                    <select id="qualitySelect" class="modern-select">
+                        <option value="best">Melhor qualidade</option>
+                        <option value="1080p">1080p Full HD</option>
+                        <option value="720p" selected>720p HD</option>
+                        <option value="480p">480p SD</option>
+                        <option value="audio">Apenas áudio (MP3)</option>
+                    </select>
+                </div>
+                <div class="setting-card">
+                    <div class="card-icon"><i class="fas fa-cog"></i></div>
+                    <h3>Opções extras</h3>
+                    <label class="modern-checkbox">
+                        <input type="checkbox" id="downloadSubtitles">
+                        <span>📝 Baixar legendas</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="features" class="features">
+    <div class="container">
+        <h2 class="section-title">Recursos <span class="gradient-text">Poderosos</span></h2>
+        <div class="features-grid">
+            <div class="feature-card"><i class="fas fa-globe"></i><h3>1800+ Sites</h3></div>
+            <div class="feature-card"><i class="fas fa-video"></i><h3>Múltiplas Qualidades</h3></div>
+            <div class="feature-card"><i class="fas fa-list"></i><h3>Suporte a Playlists</h3></div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2025 BaixarYou - Desenvolvido por MisaAndrejezieski</p>
+    </div>
+</footer>
+
+<div id="downloadProgress" class="download-progress" style="display: none;">
+    <div class="progress-header">
+        <span id="progressTitle">Baixando...</span>
+        <span id="progressPercent">0%</span>
+    </div>
+    <div class="progress-bar-wrapper">
+        <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
