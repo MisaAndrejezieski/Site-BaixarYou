@@ -11,38 +11,49 @@ CORS(app)
 DOWNLOAD_FOLDER = Path(__file__).parent / "downloads"
 DOWNLOAD_FOLDER.mkdir(exist_ok=True)
 
+def sanitize_filename(filename):
+    """Remove caracteres inválidos do nome do arquivo"""
+    return re.sub(r'[<>:"/\\|?*]', '_', filename)
+
 @app.route('/api/download', methods=['POST'])
 def download_video():
-    data = request.json
+    data = request.get_json()
     url = data.get('url')
-    quality = data.get('quality', '720p')
+    quality = data.get('quality', 'best')
     
     if not url:
         return jsonify({'error': 'URL não fornecida'}), 400
     
     try:
-        # Opções mais simples para evitar erros
+        # Opções do yt-dlp
         ydl_opts = {
             'outtmpl': str(DOWNLOAD_FOLDER / '%(title)s.%(ext)s'),
-            'format': 'best',  # Formato mais simples
+            'format': 'best',
             'quiet': True,
             'no_warnings': True,
-            'ignoreerrors': False,
         }
         
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            # Baixar o vídeo
             info = ydl.extract_info(url, download=True)
+            
+            # Encontrar o arquivo baixado
             filename = ydl.prepare_filename(info)
             
-            # Procurar o arquivo baixado
+            # Se não encontrar, procurar na pasta
             if not os.path.exists(filename):
+                base = os.path.splitext(filename)[0]
                 for f in os.listdir(DOWNLOAD_FOLDER):
-                    if f.startswith(os.path.splitext(filename)[0]):
+                    if f.startswith(base) or f.startswith(sanitize_filename(info.get('title', 'video'))):
                         filename = os.path.join(DOWNLOAD_FOLDER, f)
                         break
             
-            # Limpar nome do arquivo
-            safe_title = re.sub(r'[<>:"/\\|?*]', '_', info.get('title', 'video'))
+            # Verificar se o arquivo existe
+            if not os.path.exists(filename):
+                return jsonify({'error': 'Arquivo não encontrado após download'}), 500
+            
+            # Nome seguro para download
+            safe_title = sanitize_filename(info.get('title', 'video'))
             ext = os.path.splitext(filename)[1]
             
             return send_file(
@@ -51,15 +62,21 @@ def download_video():
                 download_name=f"{safe_title}{ext}"
             )
             
+    except yt_dlp.utils.DownloadError as e:
+        return jsonify({'error': f'Erro no download: {str(e)}'}), 500
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': f'Erro: {str(e)}'}), 500
 
 @app.route('/api/health', methods=['GET'])
 def health():
-    return jsonify({'status': 'ok'})
+    return jsonify({'status': 'ok', 'message': 'BaixarYou backend rodando!'})
 
 if __name__ == '__main__':
+    print("=" * 50)
     print("🚀 BaixarYou Backend")
-    print(f"📁 Downloads: {DOWNLOAD_FOLDER}")
-    print("=" * 40)
+    print("=" * 50)
+    print(f"📁 Downloads salvos em: {DOWNLOAD_FOLDER}")
+    print("🌐 Servidor rodando em: http://localhost:5000")
+    print("=" * 50)
     app.run(host='0.0.0.0', port=5000, debug=True)
+    
